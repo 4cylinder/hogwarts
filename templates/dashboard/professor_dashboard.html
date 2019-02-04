@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block headtitle %}
+Hogwarts Dashboard
+{% endblock %}
+{% block sidebar %}
+{% include 'dashboard/sidebar.html' %}
+{% endblock %}
+{% block navbar %}
+{% include 'dashboard/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="row">
+    <!-- Pie chart to show who has and hasn't done the current survey -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header ">
+                <h4 class="card-title">Sorting Hat Survey Progress</h4>
+                <p class="card-category">Values below represent student count</p>
+            </div>
+            <div class="card-body ">
+                <div id="surveySubmissionChart" class="ct-chart"></div>
+            </div>
+            <div class="card-footer ">
+                <div class="legend">
+                    <i class="fa fa-circle text-info"></i> Submitted Survey
+                    <i class="fa fa-circle text-danger"></i> Did Not Submit
+                </div>
+                <hr/>
+                <div class="stats"><i class="fa fa-clock-o"></i> Current semester: {{semester}}</div>
+            </div>
+        </div>
+    </div>
+    <!-- Bar graph to show who is eligible to graduate, who is still in progress, etc -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header ">
+                <h4 class="card-title">Student </h4>
+                <p class="card-category">Values below represent student count</p>
+            </div>
+            <div class="card-body">
+                <div id="studentStatGraph" class="ct-chart"></div>
+            </div>
+            <div class="card-footer ">
+                <div class="legend">
+                    <i class="fa fa-circle text-info"></i> Eligible to Graduate
+                    <i class="fa fa-circle text-danger"></i> In Progress
+                    <i class="fa fa-circle text-warning"></i> New Hire
+                </div>
+                <hr/>
+                <div class="stats"><i class="fa fa-clock-o"></i> Current semester: {{semester}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row"> 
+    <div class="col-md-6">
+        <div class="card card-tasks">
+            <div class="card-header ">
+                <h4 class="card-title">Tasks</h4>
+                <p class="card-category">What's left to do?</p>
+            </div>
+            <div class="card-body ">
+                <div class="table-full-width">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>Schedule Diagon Alley career fair</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="" checked>
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>Organize Quidditch Event</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<!--  Chartist Plugin  -->
+<script src="{% static "assets/js/plugins/chartist.min.js" %}" type="text/javascript"></script>
+<script>
+$(function(){
+    // Highlight appropriate sidebar link
+    $('#dashboardRow1').addClass("nav-item active");
+
+    // AJAX function to get survey progress remotely
+    $.get("{% url 'getSurveyProgress' %}", function(data, status){
+        if (status=="success") {
+            Chartist.Pie('#surveySubmissionChart', {
+                labels: [data.numFilled, data.numNotFilled],
+                series: [data.numFilled, data.numNotFilled]
+            });
+        } else {
+            console.log("error");
+        }
+    });
+
+    // AJAX function to get overall progress remotely
+    $.get("{% url 'getStudentStats' %}", function(data, status){
+        if (status=="success") {
+            Chartist.Bar('#studentStatGraph', {
+                labels: [data.graduated, data.rotating, data.newusers],
+                series: [data.graduated, data.rotating, data.newusers]
+            }, { distributeSeries: true });
+        } else {
+            console.log("error");
+        }
+    });
+
+});
+</script>
+{% endblock %}

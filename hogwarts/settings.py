@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'academics.apps.AcademicsConfig',
     'sortinghat.apps.SortinghatConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -126,7 +127,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# LOGIN_REDIRECT_URL='/dashboard/'
-# LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL='/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"

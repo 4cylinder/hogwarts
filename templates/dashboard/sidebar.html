@@ -1,0 +1,67 @@
+{% load static %}
+<div class="sidebar" data-image="{% static "assets/img/sidebar-5.jpg" %}" data-color="blue">
+	<!--
+Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+Tip 2: you can also add an image using data-image tag
+-->
+	<div class="sidebar-wrapper">
+		<div class="logo">
+			<a href="#" class="simple-text">TRACK</a>
+		</div>
+		<ul class="nav">
+			<li id='dashboardRow1'>
+				<a class="nav-link" href="{% url 'dashboard' %}">
+					<i class="nc-icon nc-chart-pie-35"></i>
+					<p>Dashboard</p>
+				</a>
+			</li>
+			{% if request.user.is_staff %}
+			<li id='dashboardRow2'>
+				<a class="nav-link" href="{% url 'view_students' %}">
+					<i class="nc-icon nc-circle-09"></i>
+					<p>View Students</p>
+				</a>
+			</li>
+			<li id='dashboardRow3'>
+				<a class="nav-link" href="#">
+					<i class="nc-icon nc-notes"></i>
+					<p>Manage Courses</p>
+				</a>
+			</li>
+			<li id='dashboardRow4'>
+				<a class="nav-link" href="#">
+					<i class="nc-icon nc-paper-2"></i>
+					<p>Manage Semesters</p>
+				</a>
+			</li>
+			<li id='dashboardRow5'>
+				<a class="nav-link" href="{% url 'survey_statistics' %}">
+					<i class="nc-icon nc-atom"></i>
+					<p>Survey Statistics</p>
+				</a>
+			</li>
+			<li id='dashboardRow6'>
+				<a class="nav-link" href="{% url 'sortinghat:professor_survey' %}">
+					<i class="nc-icon nc-notes"></i>
+					<p>Sorting Hat Survey</p>
+				</a>
+			</li>
+			{% else %}
+			<li id='dashboardRow2'>
+				<a class="nav-link" href="{% url 'available_courses' %}">
+					<i class="nc-icon nc-circle-09"></i>
+					<p>Available Courses</p>
+				</a>
+			</li>
+			<li id='dashboardRow3'>
+				<a class="nav-link" href="{% url 'sortinghat:student_survey' %}">
+					<i class="nc-icon nc-notes"></i>
+					<p>Sorting Hat Survey</p>
+				</a>
+			</li>
+			{% endif %}
+			
+		</ul>
+	</div>
+</div>

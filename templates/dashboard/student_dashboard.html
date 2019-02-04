@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block headtitle %}
+Hogwarts Dashboard
+{% endblock %}
+{% block sidebar %}
+{% include 'dashboard/sidebar.html' %}
+{% endblock %}
+{% block navbar %}
+{% include 'dashboard/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-tasks">
+            <div class="card-header ">
+                <h4 class="card-title">Your Year-over-Year Progress</h4>
+                {% if eligible %}
+                <p class="card-category">You're eligible to graduate!</p>
+                {% endif %}
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-tasks">
+            <div class="card-header ">
+                <h4 class="card-title">Your Past Courses</h4>
+            </div>
+            <div class="card-body">
+                <ul>
+                {% for pastCourse in pastCourses %}
+                    <li>{{pastCourse}}</li>
+                {% endfor %}
+                <ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(function(){
+    $('#dashboardRow1').addClass("nav-item active");
+});
+</script>
+{% endblock %}
